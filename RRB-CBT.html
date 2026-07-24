@@ -1,0 +1,1836 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RRB CBT · Exam Start + Profile Graph</title>
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+      /* ===== LIGHT / DARK ===== */
+      :root {
+        --bg-body: #f4f7fc;
+        --bg-container: #ffffff;
+        --text-primary: #0b2a4a;
+        --text-secondary: #3d5a78;
+        --text-muted: #5a6f84;
+        --border-color: #e2e8f0;
+        --card-bg: #ffffff;
+        --card-border: #eef2f6;
+        --question-bg: #f9fcff;
+        --question-border: #e3eaf2;
+        --option-bg: #ffffff;
+        --option-border: #dde5ef;
+        --option-hover: #eef5ff;
+        --tab-bg: #f1f5f9;
+        --tab-active: #1a3a5e;
+        --tab-text: #2c3e50;
+        --input-bg: #fafcff;
+        --input-border: #d0dbe8;
+        --badge-bg: #e3f0fa;
+        --badge-text: #1e4b77;
+        --hint-bg: #f2f6fd;
+        --hint-text: #1a3f62;
+        --shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        --score-bg: #e5f0fa;
+        --footer-border: #e2eaf2;
+        --preview-bg: #f6faff;
+        --preview-border: #dce6f2;
+        --subhead-bg: #f0f5fe;
+        --subhead-border: #2a7de1;
+        --btn-primary: #1a3a5e;
+        --btn-primary-hover: #0f2a44;
+        --btn-success: #1f7b4d;
+        --btn-success-hover: #14633b;
+        --btn-danger: #c0392b;
+        --btn-danger-hover: #a93226;
+        --btn-outline-border: #b7c9dd;
+        --btn-outline-hover: #e6edf6;
+        --save-indicator: #27ae60;
+        --profile-bg: #f2f8ff;
+        --timer-warning: #e67e22;
+        --timer-danger: #c0392b;
+        --exam-start-bg: #e8f5e9;
+      }
+      [data-theme="dark"] {
+        --bg-body: #0d1117;
+        --bg-container: #161b22;
+        --text-primary: #e6edf3;
+        --text-secondary: #8b949e;
+        --text-muted: #8b949e;
+        --border-color: #30363d;
+        --card-bg: #1c2333;
+        --card-border: #30363d;
+        --question-bg: #0d1117;
+        --question-border: #30363d;
+        --option-bg: #161b22;
+        --option-border: #30363d;
+        --option-hover: #1c2333;
+        --tab-bg: #21262d;
+        --tab-active: #2d7de1;
+        --tab-text: #e6edf3;
+        --input-bg: #0d1117;
+        --input-border: #30363d;
+        --badge-bg: #21262d;
+        --badge-text: #8b949e;
+        --hint-bg: #1c2333;
+        --hint-text: #8b949e;
+        --shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        --score-bg: #21262d;
+        --footer-border: #30363d;
+        --preview-bg: #0d1117;
+        --preview-border: #30363d;
+        --subhead-bg: #1c2333;
+        --subhead-border: #2d7de1;
+        --btn-primary: #2d7de1;
+        --btn-primary-hover: #1a6bd4;
+        --btn-success: #238636;
+        --btn-success-hover: #2ea043;
+        --btn-danger: #da3633;
+        --btn-danger-hover: #f85149;
+        --btn-outline-border: #30363d;
+        --btn-outline-hover: #21262d;
+        --save-indicator: #3fb950;
+        --profile-bg: #1c2333;
+        --timer-warning: #f0a030;
+        --timer-danger: #f85149;
+        --exam-start-bg: #1a3a2a;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Roboto, system-ui, sans-serif;
+        transition:
+          background-color 0.2s,
+          color 0.2s,
+          border-color 0.2s;
+      }
+      body {
+        background: var(--bg-body);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+      .app-container {
+        max-width: 1200px;
+        width: 100%;
+        background: var(--bg-container);
+        border-radius: 32px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        padding: 24px 28px 32px;
+      }
+      .header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 8px;
+      }
+      h1 {
+        font-weight: 600;
+        font-size: 1.9rem;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .header-controls {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .theme-toggle {
+        background: var(--tab-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 40px;
+        padding: 8px 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--text-primary);
+      }
+      .theme-toggle:hover {
+        background: var(--btn-outline-hover);
+        transform: scale(1.02);
+      }
+      .theme-toggle .sun-icon {
+        color: #f39c12;
+      }
+      .theme-toggle .moon-icon {
+        color: #7f8c8d;
+      }
+      [data-theme="dark"] .theme-toggle .sun-icon {
+        display: none;
+      }
+      [data-theme="light"] .theme-toggle .moon-icon {
+        display: none;
+      }
+      .subhead {
+        color: var(--text-secondary);
+        font-weight: 400;
+        margin-bottom: 24px;
+        border-left: 4px solid var(--subhead-border);
+        padding-left: 16px;
+        background: var(--subhead-bg);
+        border-radius: 0 12px 12px 0;
+        line-height: 1.5;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .subhead-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      #storageStatus {
+        font-size: 0.85rem;
+        color: var(--save-indicator);
+      }
+      .portal-tabs {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 28px;
+        flex-wrap: wrap;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 12px;
+      }
+      .tab-btn {
+        background: transparent;
+        border: none;
+        padding: 10px 22px;
+        font-weight: 600;
+        font-size: 1rem;
+        border-radius: 40px;
+        color: var(--tab-text);
+        cursor: pointer;
+        transition: 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--tab-bg);
+      }
+      .tab-btn i {
+        font-size: 1.1rem;
+        color: var(--subhead-border);
+      }
+      .tab-btn.active {
+        background: var(--tab-active);
+        color: white;
+        box-shadow: 0 4px 8px rgba(26, 58, 94, 0.2);
+      }
+      .tab-btn.active i {
+        color: white;
+      }
+      .tab-content {
+        display: none;
+        animation: fade 0.25s ease;
+      }
+      .tab-content.active {
+        display: block;
+      }
+      @keyframes fade {
+        0% {
+          opacity: 0.5;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+      .card {
+        background: var(--card-bg);
+        border-radius: 24px;
+        padding: 22px 24px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+        border: 1px solid var(--card-border);
+        margin-bottom: 24px;
+      }
+      .card-header {
+        font-weight: 600;
+        font-size: 1.2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+        color: var(--text-primary);
+        border-bottom: 1px dashed var(--border-color);
+        padding-bottom: 10px;
+      }
+      .question-box {
+        background: var(--question-bg);
+        border-radius: 18px;
+        padding: 20px;
+        border: 1px solid var(--question-border);
+        margin-bottom: 20px;
+      }
+      .question-text {
+        font-size: 1.2rem;
+        font-weight: 500;
+        margin-bottom: 18px;
+        color: var(--text-primary);
+      }
+      .options label {
+        display: block;
+        background: var(--option-bg);
+        padding: 12px 18px;
+        border-radius: 40px;
+        margin-bottom: 10px;
+        border: 1px solid var(--option-border);
+        transition: 0.15s;
+        cursor: pointer;
+        color: var(--text-primary);
+      }
+      .options label:hover {
+        background: var(--option-hover);
+        border-color: var(--subhead-border);
+      }
+      .options input[type="radio"] {
+        margin-right: 14px;
+        accent-color: var(--tab-active);
+        transform: scale(1.1);
+      }
+      .btn {
+        background: var(--btn-primary);
+        border: none;
+        color: white;
+        padding: 12px 28px;
+        border-radius: 60px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        transition: 0.2s;
+        border: 1px solid transparent;
+      }
+      .btn:hover {
+        transform: scale(0.98);
+      }
+      .btn-outline {
+        background: transparent;
+        border: 1px solid var(--btn-outline-border);
+        color: var(--text-primary);
+      }
+      .btn-outline:hover {
+        background: var(--btn-outline-hover);
+      }
+      .btn-primary {
+        background: var(--btn-primary);
+        color: white;
+      }
+      .btn-primary:hover {
+        background: var(--btn-primary-hover);
+      }
+      .btn-success {
+        background: var(--btn-success);
+        color: white;
+      }
+      .btn-success:hover {
+        background: var(--btn-success-hover);
+      }
+      .btn-danger {
+        background: var(--btn-danger);
+        color: white;
+      }
+      .btn-danger:hover {
+        background: var(--btn-danger-hover);
+      }
+      .btn-exam-start {
+        background: #2e7d32;
+        color: white;
+        padding: 14px 40px;
+        font-size: 1.2rem;
+        border-radius: 60px;
+        box-shadow: 0 4px 14px rgba(46, 125, 50, 0.4);
+      }
+      .btn-exam-start:hover {
+        background: #1b5e20;
+        transform: scale(0.97);
+      }
+      .btn-exam-start:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+      .admin-panel textarea {
+        width: 100%;
+        border: 1px solid var(--input-border);
+        border-radius: 18px;
+        padding: 16px;
+        font-family: monospace;
+        font-size: 0.95rem;
+        resize: vertical;
+        min-height: 120px;
+        background: var(--input-bg);
+        color: var(--text-primary);
+      }
+      .admin-panel textarea:focus {
+        outline: 2px solid var(--subhead-border);
+        border-color: transparent;
+      }
+      .admin-actions {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin: 12px 0 16px;
+      }
+      .status-badge {
+        background: var(--badge-bg);
+        color: var(--badge-text);
+        border-radius: 60px;
+        padding: 6px 18px;
+        font-size: 0.9rem;
+      }
+      .candidate-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+      }
+      .score-area {
+        background: var(--score-bg);
+        border-radius: 60px;
+        padding: 6px 20px;
+        font-weight: 500;
+        color: var(--text-primary);
+      }
+      .question-counter {
+        font-weight: 400;
+        color: var(--text-secondary);
+      }
+      .footer-note {
+        margin-top: 24px;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        text-align: center;
+        border-top: 1px solid var(--footer-border);
+        padding-top: 18px;
+      }
+      .example-hint {
+        background: var(--hint-bg);
+        padding: 12px 16px;
+        border-radius: 40px;
+        font-size: 0.9rem;
+        color: var(--hint-text);
+      }
+      .example-hint i {
+        margin-right: 8px;
+        color: var(--subhead-border);
+      }
+      .save-indicator {
+        font-size: 0.8rem;
+        color: var(--save-indicator);
+        margin-left: 10px;
+      }
+      .data-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+      .data-actions .btn {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+      }
+      .preview-area {
+        background: var(--preview-bg);
+        border-radius: 20px;
+        padding: 14px;
+        border: 1px solid var(--preview-border);
+      }
+      .profile-stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-bottom: 20px;
+        background: var(--profile-bg);
+        border-radius: 20px;
+        padding: 16px 20px;
+        border: 1px solid var(--border-color);
+      }
+      .stat-item {
+        flex: 1 1 120px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1.2;
+      }
+      .stat-label {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .chart-container {
+        position: relative;
+        height: 220px;
+        max-width: 100%;
+        margin: 16px 0 8px;
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 12px;
+        border: 1px solid var(--border-color);
+      }
+      .profile-history {
+        max-height: 200px;
+        overflow-y: auto;
+        margin-top: 12px;
+        background: var(--profile-bg);
+        border-radius: 16px;
+        padding: 8px 12px;
+        border: 1px solid var(--border-color);
+      }
+      .history-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0;
+        border-bottom: 1px solid var(--border-color);
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+      }
+      .history-item:last-child {
+        border-bottom: none;
+      }
+      .history-score {
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+      /* Timer styles */
+      .timer-box {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: var(--badge-bg);
+        border-radius: 60px;
+        padding: 4px 18px 4px 12px;
+        font-weight: 600;
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+      }
+      .timer-box i {
+        font-size: 1.2rem;
+        color: var(--subhead-border);
+      }
+      #timerDisplay {
+        font-size: 1.3rem;
+        min-width: 70px;
+        text-align: center;
+        font-variant-numeric: tabular-nums;
+      }
+      .timer-warning {
+        color: var(--timer-warning) !important;
+      }
+      .timer-danger {
+        color: var(--timer-danger) !important;
+        animation: pulse 0.8s infinite;
+      }
+      @keyframes pulse {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.4;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+      .timer-admin {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin: 10px 0 8px;
+      }
+      .timer-admin input {
+        width: 100px;
+        padding: 8px 12px;
+        border-radius: 30px;
+        border: 1px solid var(--input-border);
+        background: var(--input-bg);
+        color: var(--text-primary);
+        font-weight: 600;
+      }
+      .timer-admin input:focus {
+        outline: 2px solid var(--subhead-border);
+      }
+      .timer-controls {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .exam-start-area {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 16px;
+        padding: 12px;
+        background: var(--exam-start-bg);
+        border-radius: 40px;
+        border: 1px solid var(--border-color);
+      }
+      .exam-status {
+        font-weight: 500;
+        color: var(--text-secondary);
+        margin-left: 12px;
+      }
+      @media (max-width: 600px) {
+        .app-container {
+          padding: 16px;
+        }
+        .tab-btn {
+          padding: 8px 14px;
+          font-size: 0.9rem;
+        }
+        .candidate-actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .header-top {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .header-controls {
+          justify-content: flex-start;
+        }
+        .profile-stats {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 12px;
+        }
+        .stat-item {
+          flex-direction: row;
+          justify-content: space-between;
+          padding: 4px 0;
+        }
+        .stat-number {
+          font-size: 1.4rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container" id="app">
+      <div class="header-top">
+        <h1>
+          <i class="fas fa-train" style="color: var(--subhead-border)"></i> RRB
+          CBT · Practice
+        </h1>
+        <div class="header-controls">
+          <button class="theme-toggle" id="themeToggle">
+            <i class="fas fa-sun sun-icon"></i
+            ><i class="fas fa-moon moon-icon"></i
+            ><span id="themeLabel">Light</span>
+          </button>
+        </div>
+      </div>
+      <div class="subhead">
+        <div class="subhead-left">
+          <i class="fas fa-user-graduate"></i> Candidate &amp; Admin ·
+          <span id="storageStatus">💾 Auto-saved</span>
+        </div>
+        <span style="font-size: 0.8rem" id="questionCountFooter"
+          >0 questions</span
+        >
+      </div>
+      <div class="portal-tabs">
+        <button class="tab-btn active" data-tab="candidate">
+          <i class="fas fa-user"></i> Candidate
+        </button>
+        <button class="tab-btn" data-tab="admin">
+          <i class="fas fa-user-cog"></i> Admin
+        </button>
+        <button class="tab-btn" data-tab="profile">
+          <i class="fas fa-chart-line"></i> Profile
+        </button>
+      </div>
+
+      <!-- CANDIDATE -->
+      <div id="candidate" class="tab-content active">
+        <div class="card">
+          <div class="card-header">
+            <span
+              ><i
+                class="fas fa-pencil-alt"
+                style="margin-right: 12px; color: var(--subhead-border)"
+              ></i>
+              Practice Exam</span
+            >
+            <span class="question-counter" id="questionCounter">1 / 5</span>
+          </div>
+          <div class="exam-start-area">
+            <button class="btn btn-exam-start" id="examStartBtn">
+              <i class="fas fa-play-circle"></i> Start Exam
+            </button>
+            <span class="exam-status" id="examStatus">⏸ Not started</span>
+          </div>
+          <div id="candidateQuestionArea" class="question-box">
+            <div class="question-text" id="questionText">
+              Click "Start Exam" to begin.
+            </div>
+            <div class="options" id="optionsContainer"></div>
+          </div>
+          <div
+            style="
+              display: flex;
+              flex-wrap: wrap;
+              justify-content: space-between;
+              align-items: center;
+              gap: 12px;
+              margin-bottom: 12px;
+            "
+          >
+            <div class="timer-box">
+              <i class="fas fa-hourglass-half"></i>
+              <span id="timerDisplay">--</span>
+            </div>
+            <div class="timer-controls">
+              <button class="btn btn-outline" id="timerPauseBtn">
+                <i class="fas fa-pause"></i> Pause
+              </button>
+              <button class="btn btn-outline" id="timerResetBtn">
+                <i class="fas fa-undo"></i> Reset
+              </button>
+            </div>
+          </div>
+          <div class="candidate-actions">
+            <div>
+              <button class="btn btn-outline" id="prevBtn">
+                <i class="fas fa-chevron-left"></i> Prev
+              </button>
+              <button class="btn btn-outline" id="nextBtn">
+                Next <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+            <div>
+              <button class="btn btn-success" id="submitExamBtn">
+                <i class="fas fa-check-circle"></i> Submit exam
+              </button>
+              <button
+                class="btn btn-outline"
+                id="resetExamBtn"
+                style="margin-left: 8px"
+              >
+                <i class="fas fa-redo"></i> Reset
+              </button>
+            </div>
+            <div class="score-area" id="scoreDisplay">Score: 0</div>
+          </div>
+        </div>
+        <div class="example-hint">
+          <i class="fas fa-info-circle"></i> Click "Start Exam" to begin the
+          timed test. Timer runs per question (admin-set).
+        </div>
+      </div>
+
+      <!-- ADMIN -->
+      <div id="admin" class="tab-content admin-panel">
+        <div class="card">
+          <div class="card-header">
+            <span
+              ><i
+                class="fas fa-database"
+                style="margin-right: 10px; color: var(--btn-success)"
+              ></i>
+              Question Bank</span
+            ><span class="status-badge" id="questionCountBadge"
+              >0 questions</span
+            >
+          </div>
+          <div style="margin-bottom: 16px">
+            <label
+              style="
+                font-weight: 500;
+                display: block;
+                margin-bottom: 6px;
+                color: var(--text-primary);
+              "
+              ><i class="fas fa-paste"></i> Paste questions (copy‑paste
+              format)</label
+            >
+            <textarea
+              id="bulkQuestionInput"
+              placeholder="Format: one question per block&#10;Question: What is 2+2?&#10;Options: 3|4|5|6&#10;Answer: 4&#10;&#10;Question: ..."
+            ></textarea>
+            <div class="admin-actions">
+              <button class="btn btn-primary" id="addBulkBtn">
+                <i class="fas fa-plus-circle"></i> Add / Replace
+              </button>
+              <button class="btn btn-outline" id="clearAllBtn">
+                <i class="fas fa-trash-alt"></i> Clear all
+              </button>
+              <button class="btn btn-outline" id="loadSampleBtn">
+                <i class="fas fa-file-alt"></i> Load sample
+              </button>
+            </div>
+            <div
+              style="
+                font-size: 0.9rem;
+                color: var(--text-secondary);
+                background: var(--preview-bg);
+                padding: 8px 14px;
+                border-radius: 30px;
+                display: inline-block;
+              "
+            >
+              <i
+                class="fas fa-check-circle"
+                style="color: var(--save-indicator)"
+              ></i>
+              Current: <span id="adminQuestionCount">0</span> questions
+              <span class="save-indicator"
+                ><i class="fas fa-save"></i> auto-saved</span
+              >
+            </div>
+          </div>
+          <div
+            style="
+              margin: 12px 0 16px;
+              background: var(--profile-bg);
+              padding: 12px 16px;
+              border-radius: 30px;
+              border: 1px solid var(--border-color);
+              display: flex;
+              flex-wrap: wrap;
+              align-items: center;
+              gap: 16px;
+            "
+          >
+            <span style="font-weight: 500; color: var(--text-primary)"
+              ><i class="fas fa-clock"></i> Timer per question (seconds):</span
+            >
+            <input
+              type="number"
+              id="timerSettingInput"
+              value="30"
+              min="5"
+              max="300"
+              style="
+                width: 100px;
+                padding: 8px 12px;
+                border-radius: 30px;
+                border: 1px solid var(--input-border);
+                background: var(--input-bg);
+                color: var(--text-primary);
+                font-weight: 600;
+              "
+            />
+            <button
+              class="btn btn-primary"
+              id="applyTimerBtn"
+              style="padding: 8px 20px"
+            >
+              <i class="fas fa-save"></i> Apply
+            </button>
+            <span style="font-size: 0.85rem; color: var(--text-muted)"
+              >(auto-applies to new timer cycles)</span
+            >
+          </div>
+          <div class="preview-area">
+            <p
+              style="
+                font-weight: 500;
+                margin-bottom: 6px;
+                color: var(--text-primary);
+              "
+            >
+              <i class="fas fa-list-ul"></i> Question preview (first 3)
+            </p>
+            <div
+              id="adminPreview"
+              style="
+                font-size: 0.95rem;
+                max-height: 150px;
+                overflow-y: auto;
+                color: var(--text-secondary);
+              "
+            >
+              No questions yet.
+            </div>
+          </div>
+          <div
+            style="
+              margin-top: 16px;
+              padding-top: 16px;
+              border-top: 1px solid var(--border-color);
+            "
+          >
+            <p
+              style="
+                font-weight: 500;
+                margin-bottom: 8px;
+                color: var(--text-primary);
+              "
+            >
+              <i class="fas fa-file-export"></i> Data Management
+            </p>
+            <div class="data-actions">
+              <button class="btn btn-outline" id="exportDataBtn">
+                <i class="fas fa-download"></i> Export Questions
+              </button>
+              <button class="btn btn-outline" id="importDataBtn">
+                <i class="fas fa-upload"></i> Import Questions
+              </button>
+              <input
+                type="file"
+                id="fileInput"
+                accept=".json"
+                style="display: none"
+              />
+              <button class="btn btn-danger" id="clearStorageBtn">
+                <i class="fas fa-eraser"></i> Clear Saved Data
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="example-hint">
+          <i class="fas fa-code"></i> Format: <strong>Question:</strong> text
+          <br /><strong>Options:</strong> opt1|opt2|opt3|opt4 &nbsp;
+          <strong>Answer:</strong> correct option
+        </div>
+      </div>
+
+      <!-- PROFILE -->
+      <div id="profile" class="tab-content">
+        <div class="card">
+          <div class="card-header">
+            <span
+              ><i
+                class="fas fa-chart-simple"
+                style="margin-right: 12px; color: var(--subhead-border)"
+              ></i>
+              Exam History & Performance</span
+            ><span class="status-badge" id="profileAttemptsBadge"
+              >0 attempts</span
+            >
+          </div>
+          <div class="profile-stats">
+            <div class="stat-item">
+              <span class="stat-number" id="profileTotalAttempts">0</span
+              ><span class="stat-label">Total Attempts</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number" id="profileAvgScore">0%</span
+              ><span class="stat-label">Average Score</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number" id="profileBestScore">0%</span
+              ><span class="stat-label">Best Score</span>
+            </div>
+          </div>
+          <div class="chart-container"><canvas id="profileChart"></canvas></div>
+          <div>
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 12px;
+                margin-bottom: 8px;
+              "
+            >
+              <span style="font-weight: 500; color: var(--text-primary)"
+                ><i class="fas fa-clock-rotate-left"></i> Recent Attempts</span
+              >
+              <button
+                class="btn btn-outline"
+                id="clearHistoryBtn"
+                style="padding: 6px 16px; font-size: 0.8rem"
+              >
+                <i class="fas fa-trash-can"></i> Clear History
+              </button>
+            </div>
+            <div id="profileHistoryList" class="profile-history">
+              <div
+                style="
+                  color: var(--text-muted);
+                  text-align: center;
+                  padding: 12px 0;
+                "
+              >
+                No attempts recorded yet.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="example-hint">
+          <i class="fas fa-chart-bar"></i> Each exam submission is recorded with
+          date, score and total questions.
+        </div>
+      </div>
+
+      <div class="footer-note">
+        <i class="fas fa-server"></i> Data persists in localStorage ·
+        <span id="questionCountFooter2">0</span> questions loaded
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        "use strict";
+        // ----- THEME -----
+        function getPreferredTheme() {
+          const s = localStorage.getItem("rrbTheme");
+          if (s) return s;
+          return window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+        }
+        function setTheme(t) {
+          document.documentElement.setAttribute("data-theme", t);
+          localStorage.setItem("rrbTheme", t);
+          document.getElementById("themeLabel").textContent =
+            t.charAt(0).toUpperCase() + t.slice(1);
+        }
+        function toggleTheme() {
+          const c =
+            document.documentElement.getAttribute("data-theme") || "light";
+          setTheme(c === "light" ? "dark" : "light");
+        }
+        setTheme(getPreferredTheme());
+        document
+          .getElementById("themeToggle")
+          .addEventListener("click", toggleTheme);
+
+        // ----- DATA -----
+        let questions = [];
+        let currentQuestionIndex = 0;
+        let selectedAnswers = {};
+        let examSubmitted = false;
+        let examHistory = [];
+        let timerSeconds = 30;
+        let timerRemaining = 30;
+        let timerInterval = null;
+        let timerRunning = false;
+        let timerPaused = false;
+        let examStarted = false;
+
+        const defaultQuestions = [
+          {
+            question: "What is the capital of India?",
+            options: ["New Delhi", "Mumbai", "Kolkata", "Chennai"],
+            answer: "New Delhi",
+          },
+          {
+            question: "Which of the following is a prime number?",
+            options: ["21", "29", "49", "51"],
+            answer: "29",
+          },
+          {
+            question: "What is the square root of 144?",
+            options: ["10", "11", "12", "13"],
+            answer: "12",
+          },
+          {
+            question: "Who wrote the Indian national anthem 'Jana Gana Mana'?",
+            options: [
+              "Bankim Chandra",
+              "Rabindranath Tagore",
+              "Mahatma Gandhi",
+              "Subhas Chandra Bose",
+            ],
+            answer: "Rabindranath Tagore",
+          },
+          {
+            question: "Which planet is known as the Red Planet?",
+            options: ["Venus", "Jupiter", "Mars", "Saturn"],
+            answer: "Mars",
+          },
+        ];
+
+        // ----- PERSISTENCE -----
+        function saveAllData() {
+          try {
+            const data = {
+              questions,
+              selectedAnswers,
+              currentQuestionIndex,
+              examSubmitted,
+              examHistory,
+              timerSeconds,
+              examStarted,
+            };
+            localStorage.setItem("rrbExamData", JSON.stringify(data));
+            document.getElementById("storageStatus").textContent =
+              "💾 Auto-saved";
+          } catch (e) {
+            console.warn("Save error", e);
+          }
+        }
+        function loadAllData() {
+          try {
+            const s = localStorage.getItem("rrbExamData");
+            if (s) {
+              const d = JSON.parse(s);
+              questions = d.questions || [];
+              selectedAnswers = d.selectedAnswers || {};
+              currentQuestionIndex = d.currentQuestionIndex || 0;
+              examSubmitted = d.examSubmitted || false;
+              examHistory = d.examHistory || [];
+              if (d.timerSeconds) timerSeconds = d.timerSeconds;
+              if (d.examStarted !== undefined) examStarted = d.examStarted;
+              return true;
+            }
+          } catch (e) {
+            console.warn("Load error", e);
+          }
+          return false;
+        }
+        function clearAllData() {
+          localStorage.removeItem("rrbExamData");
+          questions = [];
+          selectedAnswers = {};
+          currentQuestionIndex = 0;
+          examSubmitted = false;
+          examHistory = [];
+          examStarted = false;
+        }
+
+        // ----- DOM refs -----
+        const qText = document.getElementById("questionText"),
+          optsContainer = document.getElementById("optionsContainer");
+        const qCounter = document.getElementById("questionCounter"),
+          scoreDisplay = document.getElementById("scoreDisplay");
+        const prevBtn = document.getElementById("prevBtn"),
+          nextBtn = document.getElementById("nextBtn");
+        const submitBtn = document.getElementById("submitExamBtn"),
+          resetExamBtn = document.getElementById("resetExamBtn");
+        const bulkInput = document.getElementById("bulkQuestionInput"),
+          addBulkBtn = document.getElementById("addBulkBtn");
+        const clearAllBtn = document.getElementById("clearAllBtn"),
+          loadSampleBtn = document.getElementById("loadSampleBtn");
+        const adminPreview = document.getElementById("adminPreview"),
+          adminQuestionCount = document.getElementById("adminQuestionCount");
+        const qBadge = document.getElementById("questionCountBadge"),
+          qFooter = document.getElementById("questionCountFooter"),
+          qFooter2 = document.getElementById("questionCountFooter2");
+        const exportBtn = document.getElementById("exportDataBtn"),
+          importBtn = document.getElementById("importDataBtn"),
+          fileInput = document.getElementById("fileInput"),
+          clearStorageBtn = document.getElementById("clearStorageBtn");
+        const profileAttemptsBadge = document.getElementById(
+            "profileAttemptsBadge",
+          ),
+          profileTotalAttempts = document.getElementById(
+            "profileTotalAttempts",
+          );
+        const profileAvgScore = document.getElementById("profileAvgScore"),
+          profileBestScore = document.getElementById("profileBestScore");
+        const profileHistoryList =
+            document.getElementById("profileHistoryList"),
+          clearHistoryBtn = document.getElementById("clearHistoryBtn");
+        const timerDisplay = document.getElementById("timerDisplay");
+        const timerPauseBtn = document.getElementById("timerPauseBtn"),
+          timerResetBtn = document.getElementById("timerResetBtn");
+        const timerSettingInput = document.getElementById("timerSettingInput"),
+          applyTimerBtn = document.getElementById("applyTimerBtn");
+        const examStartBtn = document.getElementById("examStartBtn"),
+          examStatus = document.getElementById("examStatus");
+        let chartInstance = null;
+
+        // ----- TIMER FUNCTIONS -----
+        function stopTimer() {
+          if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+          }
+          timerRunning = false;
+          timerPaused = false;
+        }
+        function startTimer() {
+          if (examSubmitted) return;
+          if (questions.length === 0) return;
+          if (!examStarted) return;
+          if (timerRunning && !timerPaused) return;
+          if (timerPaused) {
+            timerPaused = false;
+            timerRunning = true;
+            timerInterval = setInterval(tick, 1000);
+            return;
+          }
+          if (timerRemaining <= 0) timerRemaining = timerSeconds;
+          timerRunning = true;
+          timerPaused = false;
+          updateTimerDisplay();
+          if (timerInterval) clearInterval(timerInterval);
+          timerInterval = setInterval(tick, 1000);
+        }
+        function pauseTimer() {
+          if (timerRunning && !timerPaused && timerInterval) {
+            timerPaused = true;
+            timerRunning = false;
+            clearInterval(timerInterval);
+            timerInterval = null;
+          }
+        }
+        function resetTimer() {
+          stopTimer();
+          timerPaused = false;
+          timerRunning = false;
+          timerRemaining = timerSeconds;
+          updateTimerDisplay();
+          if (examStarted && !examSubmitted && questions.length > 0)
+            startTimer();
+        }
+        function tick() {
+          timerRemaining--;
+          updateTimerDisplay();
+          if (timerRemaining <= 0) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            timerRunning = false;
+            timerPaused = false;
+            timerRemaining = 0;
+            updateTimerDisplay();
+            if (!examSubmitted && questions.length > 0 && examStarted) {
+              if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+                timerRemaining = timerSeconds;
+                updateTimerDisplay();
+                startTimer();
+              } else {
+                if (!examSubmitted && questions.length > 0) {
+                  let correct = 0;
+                  for (let i = 0; i < questions.length; i++) {
+                    const u = selectedAnswers[i];
+                    if (u && questions[i] && u === questions[i].answer)
+                      correct++;
+                  }
+                  examHistory.push({
+                    date: new Date().toISOString(),
+                    score: correct,
+                    total: questions.length,
+                  });
+                  examSubmitted = true;
+                  stopTimer();
+                  timerRunning = false;
+                  timerPaused = false;
+                  renderQuestion();
+                  updateScoreDisplay();
+                  updateProfileUI();
+                  saveAllData();
+                  alert(
+                    "Exam auto-submitted due to time out on last question.",
+                  );
+                }
+              }
+            }
+          }
+        }
+        function updateTimerDisplay() {
+          timerDisplay.textContent = timerRemaining > 0 ? timerRemaining : "0";
+          timerDisplay.classList.remove("timer-warning", "timer-danger");
+          if (timerRemaining <= 5 && timerRemaining > 0)
+            timerDisplay.classList.add("timer-warning");
+          if (timerRemaining === 0) timerDisplay.classList.add("timer-danger");
+        }
+
+        // ----- RENDER -----
+        function renderQuestion() {
+          if (examSubmitted) {
+            qText.textContent = "✅ Exam submitted. Review your answers below.";
+            if (questions.length > 0) {
+              const q = questions[currentQuestionIndex];
+              let html = `<div style="font-weight:500;margin-bottom:12px;color:var(--text-primary);">${q.question}</div>`;
+              q.options.forEach((opt) => {
+                const isSelected =
+                  selectedAnswers[currentQuestionIndex] === opt;
+                const isCorrect = opt === q.answer;
+                let icon = "";
+                if (isSelected && isCorrect) icon = " ✅";
+                else if (isSelected && !isCorrect) icon = " ❌";
+                else if (!isSelected && isCorrect) icon = " ✔️";
+                const bg = isSelected ? "var(--option-hover)" : "transparent";
+                html += `<div style="padding:6px 12px;border-radius:30px;background:${bg};margin:4px 0;color:var(--text-primary);">${opt} ${icon}</div>`;
+              });
+              optsContainer.innerHTML = html;
+              qCounter.textContent = `${currentQuestionIndex + 1}/${questions.length}`;
+            }
+            return;
+          }
+          if (questions.length === 0) {
+            qText.textContent = "⚠️ No questions. Please add via Admin.";
+            optsContainer.innerHTML = "";
+            qCounter.textContent = "0/0";
+            return;
+          }
+          if (!examStarted) {
+            qText.textContent = "⏳ Click 'Start Exam' to begin.";
+            optsContainer.innerHTML = "";
+            qCounter.textContent = `${currentQuestionIndex + 1}/${questions.length}`;
+            return;
+          }
+          const q = questions[currentQuestionIndex];
+          if (!q) return;
+          qText.textContent = q.question;
+          const selected = selectedAnswers[currentQuestionIndex] || null;
+          let html = "";
+          q.options.forEach((opt) => {
+            const checked = selected === opt ? "checked" : "";
+            html += `<label><input type="radio" name="qOption" value="${opt}" ${checked}> ${opt}</label>`;
+          });
+          optsContainer.innerHTML = html;
+          qCounter.textContent = `${currentQuestionIndex + 1}/${questions.length}`;
+          document
+            .querySelectorAll('input[name="qOption"]')
+            .forEach((radio) => {
+              radio.addEventListener("change", function () {
+                if (examSubmitted || !examStarted) return;
+                selectedAnswers[currentQuestionIndex] = this.value;
+                updateScoreDisplay();
+                saveAllData();
+              });
+            });
+          if (!examSubmitted && examStarted) {
+            stopTimer();
+            timerRemaining = timerSeconds;
+            updateTimerDisplay();
+            startTimer();
+          }
+        }
+
+        function updateScoreDisplay() {
+          if (questions.length === 0) {
+            scoreDisplay.textContent = "Score: 0";
+            return;
+          }
+          let correct = 0;
+          for (let i = 0; i < questions.length; i++) {
+            const u = selectedAnswers[i];
+            if (u && questions[i] && u === questions[i].answer) correct++;
+          }
+          scoreDisplay.textContent = `Score: ${correct}/${questions.length}`;
+        }
+
+        function submitExam() {
+          if (questions.length === 0) {
+            alert("No questions.");
+            return;
+          }
+          if (!examStarted) {
+            alert("Start the exam first.");
+            return;
+          }
+          let correct = 0;
+          for (let i = 0; i < questions.length; i++) {
+            const u = selectedAnswers[i];
+            if (u && questions[i] && u === questions[i].answer) correct++;
+          }
+          examHistory.push({
+            date: new Date().toISOString(),
+            score: correct,
+            total: questions.length,
+          });
+          examSubmitted = true;
+          stopTimer();
+          timerRunning = false;
+          timerPaused = false;
+          renderQuestion();
+          updateScoreDisplay();
+          updateProfileUI();
+          saveAllData();
+        }
+
+        function resetExam() {
+          if (questions.length === 0) return;
+          if (!confirm("Reset all answers and exam state?")) return;
+          stopTimer();
+          timerRunning = false;
+          timerPaused = false;
+          selectedAnswers = {};
+          examSubmitted = false;
+          examStarted = false;
+          currentQuestionIndex = 0;
+          timerRemaining = timerSeconds;
+          updateTimerDisplay();
+          examStatus.textContent = "⏸ Not started";
+          examStartBtn.disabled = false;
+          renderQuestion();
+          updateScoreDisplay();
+          saveAllData();
+        }
+
+        function goToPrev() {
+          if (questions.length === 0 || !examStarted) return;
+          if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            renderQuestion();
+            saveAllData();
+          }
+        }
+        function goToNext() {
+          if (questions.length === 0 || !examStarted) return;
+          if (currentQuestionIndex < questions.length - 1) {
+            currentQuestionIndex++;
+            renderQuestion();
+            saveAllData();
+          } else alert("You are on the last question.");
+        }
+
+        function resetExamState() {
+          stopTimer();
+          timerRunning = false;
+          timerPaused = false;
+          examSubmitted = false;
+          selectedAnswers = {};
+          currentQuestionIndex = 0;
+          examStarted = false;
+          timerRemaining = timerSeconds;
+          updateTimerDisplay();
+          examStatus.textContent = "⏸ Not started";
+          examStartBtn.disabled = false;
+          if (questions.length > 0) {
+            renderQuestion();
+            updateScoreDisplay();
+          } else {
+            renderQuestion();
+            scoreDisplay.textContent = "Score: 0";
+          }
+          saveAllData();
+        }
+
+        function startExam() {
+          if (questions.length === 0) {
+            alert("No questions in bank. Please add questions first.");
+            return;
+          }
+          if (examStarted) {
+            alert("Exam already started.");
+            return;
+          }
+          if (examSubmitted) {
+            if (!confirm("Exam already submitted. Reset and start a new one?"))
+              return;
+            resetExam();
+            setTimeout(() => {
+              startExam();
+            }, 100);
+            return;
+          }
+          examStarted = true;
+          examStatus.textContent = "▶ Running";
+          examStartBtn.disabled = true;
+          currentQuestionIndex = 0;
+          selectedAnswers = {};
+          examSubmitted = false;
+          renderQuestion();
+          updateScoreDisplay();
+          saveAllData();
+        }
+
+        // ----- ADMIN -----
+        function parseBulkQuestions(text) {
+          const blocks = text
+            .split(/\n\s*\n/)
+            .filter((b) => b.trim().length > 0);
+          const parsed = [];
+          for (let block of blocks) {
+            const lines = block
+              .split("\n")
+              .map((l) => l.trim())
+              .filter((l) => l.length > 0);
+            let qText = "",
+              opts = [],
+              answer = "";
+            for (let line of lines) {
+              if (line.toLowerCase().startsWith("question:"))
+                qText = line.substring(9).trim();
+              else if (line.toLowerCase().startsWith("options:"))
+                opts = line
+                  .substring(8)
+                  .trim()
+                  .split("|")
+                  .map((s) => s.trim());
+              else if (line.toLowerCase().startsWith("answer:"))
+                answer = line.substring(7).trim();
+            }
+            if (qText && opts.length === 4 && answer)
+              parsed.push({ question: qText, options: opts, answer });
+          }
+          return parsed;
+        }
+        function addBulkQuestions() {
+          const raw = bulkInput.value;
+          if (!raw.trim()) {
+            alert("Paste questions.");
+            return;
+          }
+          const parsed = parseBulkQuestions(raw);
+          if (parsed.length === 0) {
+            alert("No valid questions. Check format.");
+            return;
+          }
+          questions = parsed;
+          resetExamState();
+          updateAdminUI();
+          bulkInput.value = "";
+          renderQuestion();
+          updateScoreDisplay();
+          saveAllData();
+          alert(`✅ ${questions.length} questions loaded!`);
+        }
+        function clearAllQuestions() {
+          if (questions.length === 0) return;
+          if (confirm("Delete all?")) {
+            questions = [];
+            resetExamState();
+            updateAdminUI();
+            renderQuestion();
+            updateScoreDisplay();
+            saveAllData();
+          }
+        }
+        function loadSample() {
+          questions = JSON.parse(JSON.stringify(defaultQuestions));
+          resetExamState();
+          updateAdminUI();
+          renderQuestion();
+          updateScoreDisplay();
+          bulkInput.value = "";
+          saveAllData();
+          alert("Sample loaded.");
+        }
+
+        function updateAdminUI() {
+          const count = questions.length;
+          adminQuestionCount.textContent = count;
+          qBadge.textContent = count + " questions";
+          qFooter.textContent = count + " questions";
+          qFooter2.textContent = count;
+          if (count === 0) {
+            adminPreview.innerHTML =
+              '<span style="color:var(--text-muted);">No questions in bank.</span>';
+            return;
+          }
+          let html = "";
+          const preview = questions.slice(0, 3);
+          preview.forEach((q, idx) => {
+            html += `<div style="padding:6px 0;border-bottom:1px solid var(--border-color);color:var(--text-primary);"><strong>${idx + 1}.</strong> ${q.question.substring(0, 60)}${q.question.length > 60 ? "…" : ""} (${q.options.length} opts)</div>`;
+          });
+          if (questions.length > 3)
+            html += `<div style="color:var(--text-secondary);padding-top:6px;">+ ${questions.length - 3} more</div>`;
+          adminPreview.innerHTML = html;
+          saveAllData();
+        }
+
+        // ----- PROFILE UI (with date/time in labels) -----
+        function updateProfileUI() {
+          const total = examHistory.length;
+          profileAttemptsBadge.textContent = total + " attempts";
+          profileTotalAttempts.textContent = total;
+          if (total === 0) {
+            profileAvgScore.textContent = "—";
+            profileBestScore.textContent = "—";
+            profileHistoryList.innerHTML =
+              '<div style="color:var(--text-muted);text-align:center;padding:12px 0;">No attempts recorded yet.</div>';
+            if (chartInstance) {
+              chartInstance.destroy();
+              chartInstance = null;
+            }
+            return;
+          }
+          const scores = examHistory.map((e) => (e.score / e.total) * 100);
+          const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+          const best = Math.max(...scores);
+          profileAvgScore.textContent = Math.round(avg) + "%";
+          profileBestScore.textContent = Math.round(best) + "%";
+          let html = "";
+          const recent = [...examHistory].reverse().slice(0, 10);
+          recent.forEach((entry) => {
+            const dateStr = new Date(entry.date).toLocaleDateString();
+            const timeStr = new Date(entry.date).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+            const pct = Math.round((entry.score / entry.total) * 100);
+            html += `<div class="history-item"><span>${dateStr} ${timeStr}</span><span class="history-score">${entry.score}/${entry.total} (${pct}%)</span></div>`;
+          });
+          profileHistoryList.innerHTML = html;
+
+          // Chart with labels: #1 [date time], #2 [date time], etc.
+          const ctx = document.getElementById("profileChart").getContext("2d");
+          if (chartInstance) chartInstance.destroy();
+          const isDark =
+            document.documentElement.getAttribute("data-theme") === "dark";
+          const textColor = isDark ? "#e6edf3" : "#0b2a4a";
+          const gridColor = isDark ? "#30363d" : "#e2e8f0";
+
+          const labels = examHistory.map((entry, idx) => {
+            const d = new Date(entry.date);
+            const dateStr = d.toLocaleDateString();
+            const timeStr = d.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+            return `#${idx + 1} [${dateStr} ${timeStr}]`;
+          });
+
+          chartInstance = new Chart(ctx, {
+            type: "bar",
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  label: "Score %",
+                  data: examHistory.map((e) => (e.score / e.total) * 100),
+                  backgroundColor: "rgba(42,125,225,0.7)",
+                  borderColor: "rgba(42,125,225,1)",
+                  borderWidth: 1,
+                  borderRadius: 4,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: function (ctx) {
+                      return ctx.parsed.y.toFixed(0) + "%";
+                    },
+                  },
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  max: 100,
+                  grid: { color: gridColor },
+                  ticks: { color: textColor, callback: (v) => v + "%" },
+                },
+                x: {
+                  grid: { display: false },
+                  ticks: {
+                    color: textColor,
+                    maxTicksLimit: 12,
+                    maxRotation: 30,
+                    minRotation: 20,
+                    font: { size: 10 },
+                  },
+                },
+              },
+            },
+          });
+        }
+
+        // ----- EXPORT/IMPORT -----
+        function exportQuestions() {
+          if (questions.length === 0) {
+            alert("No questions.");
+            return;
+          }
+          const blob = new Blob(
+            [
+              JSON.stringify(
+                {
+                  questions,
+                  exportedAt: new Date().toISOString(),
+                  totalQuestions: questions.length,
+                },
+                null,
+                2,
+              ),
+            ],
+            { type: "application/json" },
+          );
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `rrb-questions-${new Date().toISOString().slice(0, 10)}.json`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }
+        function importQuestions(file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            try {
+              const data = JSON.parse(e.target.result);
+              if (
+                data.questions &&
+                Array.isArray(data.questions) &&
+                data.questions.length > 0
+              ) {
+                questions = data.questions;
+                resetExamState();
+                updateAdminUI();
+                renderQuestion();
+                updateScoreDisplay();
+                saveAllData();
+                alert(`✅ Imported ${questions.length} questions.`);
+              } else alert("Invalid format.");
+            } catch (err) {
+              alert("Error: " + err.message);
+            }
+          };
+          reader.readAsText(file);
+        }
+        function clearStorage() {
+          if (confirm("Delete ALL data?")) {
+            clearAllData();
+            questions = JSON.parse(JSON.stringify(defaultQuestions));
+            resetExamState();
+            updateAdminUI();
+            renderQuestion();
+            updateScoreDisplay();
+            updateProfileUI();
+            saveAllData();
+            alert("Cleared. Sample loaded.");
+          }
+        }
+
+        // ----- TAB SWITCH -----
+        function switchTab(tabId) {
+          document
+            .querySelectorAll(".tab-content")
+            .forEach((el) => el.classList.remove("active"));
+          document
+            .querySelectorAll(".tab-btn")
+            .forEach((el) => el.classList.remove("active"));
+          document.getElementById(tabId).classList.add("active");
+          document
+            .querySelector(`.tab-btn[data-tab="${tabId}"]`)
+            .classList.add("active");
+          if (tabId === "admin") updateAdminUI();
+          if (tabId === "profile") updateProfileUI();
+        }
+        document.querySelectorAll(".tab-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            switchTab(this.dataset.tab);
+          });
+        });
+
+        // ----- INIT -----
+        function init() {
+          const hasSaved = loadAllData();
+          if (!hasSaved || questions.length === 0) {
+            questions = JSON.parse(JSON.stringify(defaultQuestions));
+            selectedAnswers = {};
+            currentQuestionIndex = 0;
+            examSubmitted = false;
+            examHistory = [];
+            examStarted = false;
+            saveAllData();
+          }
+          if (currentQuestionIndex >= questions.length)
+            currentQuestionIndex = 0;
+          timerRemaining = timerSeconds;
+          timerSettingInput.value = timerSeconds;
+          resetExamState();
+          updateAdminUI();
+          renderQuestion();
+          updateScoreDisplay();
+          updateProfileUI();
+          if (examStarted) {
+            examStatus.textContent = "▶ Running";
+            examStartBtn.disabled = true;
+          } else {
+            examStatus.textContent = "⏸ Not started";
+            examStartBtn.disabled = false;
+          }
+
+          examStartBtn.addEventListener("click", startExam);
+
+          prevBtn.addEventListener("click", goToPrev);
+          nextBtn.addEventListener("click", goToNext);
+          submitBtn.addEventListener("click", function () {
+            if (examSubmitted) {
+              alert("Already submitted.");
+              return;
+            }
+            if (questions.length === 0) {
+              alert("No questions.");
+              return;
+            }
+            if (!examStarted) {
+              alert("Start the exam first.");
+              return;
+            }
+            submitExam();
+          });
+          resetExamBtn.addEventListener("click", resetExam);
+          addBulkBtn.addEventListener("click", addBulkQuestions);
+          clearAllBtn.addEventListener("click", clearAllQuestions);
+          loadSampleBtn.addEventListener("click", loadSample);
+          exportBtn.addEventListener("click", exportQuestions);
+          importBtn.addEventListener("click", function () {
+            fileInput.click();
+          });
+          fileInput.addEventListener("change", function () {
+            if (this.files && this.files[0]) {
+              importQuestions(this.files[0]);
+            }
+            this.value = "";
+          });
+          clearStorageBtn.addEventListener("click", clearStorage);
+          clearHistoryBtn.addEventListener("click", function () {
+            if (examHistory.length === 0) return;
+            if (confirm("Clear history?")) {
+              examHistory = [];
+              updateProfileUI();
+              saveAllData();
+            }
+          });
+          document.addEventListener("change", function (e) {
+            if (e.target.name === "qOption") saveAllData();
+          });
+
+          timerPauseBtn.addEventListener("click", pauseTimer);
+          timerResetBtn.addEventListener("click", resetTimer);
+
+          applyTimerBtn.addEventListener("click", function () {
+            let val = parseInt(timerSettingInput.value);
+            if (isNaN(val) || val < 1) val = 30;
+            if (val < 5) val = 5;
+            if (val > 300) val = 300;
+            timerSettingInput.value = val;
+            timerSeconds = val;
+            if (!timerRunning && !timerPaused) {
+              timerRemaining = timerSeconds;
+              updateTimerDisplay();
+            }
+            saveAllData();
+            alert("Timer updated to " + timerSeconds + " seconds.");
+          });
+
+          document
+            .getElementById("themeToggle")
+            .addEventListener("click", function () {
+              setTimeout(updateProfileUI, 100);
+            });
+        }
+
+        init();
+      })();
+    </script>
+  </body>
+</html>

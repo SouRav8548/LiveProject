@@ -1,0 +1,1307 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RRB CBT Practice Portal · Complete Edition</title>
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      /* ===== LIGHT MODE (Default) ===== */
+      :root {
+        --bg-body: #f4f7fc;
+        --bg-container: #ffffff;
+        --text-primary: #0b2a4a;
+        --text-secondary: #3d5a78;
+        --text-muted: #5a6f84;
+        --border-color: #e2e8f0;
+        --card-bg: #ffffff;
+        --card-border: #eef2f6;
+        --question-bg: #f9fcff;
+        --question-border: #e3eaf2;
+        --option-bg: #ffffff;
+        --option-border: #dde5ef;
+        --option-hover: #eef5ff;
+        --tab-bg: #f1f5f9;
+        --tab-active: #1a3a5e;
+        --tab-text: #2c3e50;
+        --input-bg: #fafcff;
+        --input-border: #d0dbe8;
+        --badge-bg: #e3f0fa;
+        --badge-text: #1e4b77;
+        --hint-bg: #f2f6fd;
+        --hint-text: #1a3f62;
+        --shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        --score-bg: #e5f0fa;
+        --footer-border: #e2eaf2;
+        --preview-bg: #f6faff;
+        --preview-border: #dce6f2;
+        --subhead-bg: #f0f5fe;
+        --subhead-border: #2a7de1;
+        --btn-primary: #1a3a5e;
+        --btn-primary-hover: #0f2a44;
+        --btn-success: #1f7b4d;
+        --btn-success-hover: #14633b;
+        --btn-danger: #c0392b;
+        --btn-danger-hover: #a93226;
+        --btn-outline-border: #b7c9dd;
+        --btn-outline-hover: #e6edf6;
+        --save-indicator: #27ae60;
+      }
+
+      /* ===== DARK MODE ===== */
+      [data-theme="dark"] {
+        --bg-body: #0d1117;
+        --bg-container: #161b22;
+        --text-primary: #e6edf3;
+        --text-secondary: #8b949e;
+        --text-muted: #8b949e;
+        --border-color: #30363d;
+        --card-bg: #1c2333;
+        --card-border: #30363d;
+        --question-bg: #0d1117;
+        --question-border: #30363d;
+        --option-bg: #161b22;
+        --option-border: #30363d;
+        --option-hover: #1c2333;
+        --tab-bg: #21262d;
+        --tab-active: #2d7de1;
+        --tab-text: #e6edf3;
+        --input-bg: #0d1117;
+        --input-border: #30363d;
+        --badge-bg: #21262d;
+        --badge-text: #8b949e;
+        --hint-bg: #1c2333;
+        --hint-text: #8b949e;
+        --shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        --score-bg: #21262d;
+        --footer-border: #30363d;
+        --preview-bg: #0d1117;
+        --preview-border: #30363d;
+        --subhead-bg: #1c2333;
+        --subhead-border: #2d7de1;
+        --btn-primary: #2d7de1;
+        --btn-primary-hover: #1a6bd4;
+        --btn-success: #238636;
+        --btn-success-hover: #2ea043;
+        --btn-danger: #da3633;
+        --btn-danger-hover: #f85149;
+        --btn-outline-border: #30363d;
+        --btn-outline-hover: #21262d;
+        --save-indicator: #3fb950;
+      }
+
+      /* ===== GLOBAL STYLES ===== */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Roboto, system-ui, sans-serif;
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease,
+          border-color 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+
+      body {
+        background: var(--bg-body);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .app-container {
+        max-width: 1200px;
+        width: 100%;
+        background: var(--bg-container);
+        border-radius: 32px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        padding: 24px 28px 32px;
+        transition: all 0.3s ease;
+      }
+
+      /* ===== HEADER ===== */
+      .header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 8px;
+      }
+
+      h1 {
+        font-weight: 600;
+        font-size: 1.9rem;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .header-controls {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      /* ===== THEME TOGGLE ===== */
+      .theme-toggle {
+        background: var(--tab-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 40px;
+        padding: 8px 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--text-primary);
+        transition: all 0.3s ease;
+      }
+
+      .theme-toggle:hover {
+        background: var(--btn-outline-hover);
+        transform: scale(1.02);
+      }
+
+      .theme-toggle i {
+        font-size: 1.1rem;
+      }
+
+      .theme-toggle .sun-icon {
+        color: #f39c12;
+      }
+      .theme-toggle .moon-icon {
+        color: #7f8c8d;
+      }
+
+      [data-theme="dark"] .theme-toggle .sun-icon {
+        display: none;
+      }
+      [data-theme="light"] .theme-toggle .moon-icon {
+        display: none;
+      }
+
+      /* ===== SUBHEAD ===== */
+      .subhead {
+        color: var(--text-secondary);
+        font-weight: 400;
+        margin-bottom: 24px;
+        border-left: 4px solid var(--subhead-border);
+        padding-left: 16px;
+        background: var(--subhead-bg);
+        border-radius: 0 12px 12px 0;
+        line-height: 1.5;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .subhead-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      #storageStatus {
+        font-size: 0.85rem;
+        color: var(--save-indicator);
+      }
+
+      /* ===== TABS ===== */
+      .portal-tabs {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 28px;
+        flex-wrap: wrap;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 12px;
+      }
+
+      .tab-btn {
+        background: transparent;
+        border: none;
+        padding: 10px 22px;
+        font-weight: 600;
+        font-size: 1rem;
+        border-radius: 40px;
+        color: var(--tab-text);
+        cursor: pointer;
+        transition: 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--tab-bg);
+      }
+
+      .tab-btn i {
+        font-size: 1.1rem;
+        color: var(--subhead-border);
+      }
+
+      .tab-btn.active {
+        background: var(--tab-active);
+        color: white;
+        box-shadow: 0 4px 8px rgba(26, 58, 94, 0.2);
+      }
+
+      .tab-btn.active i {
+        color: white;
+      }
+
+      /* ===== TAB CONTENT ===== */
+      .tab-content {
+        display: none;
+        animation: fade 0.25s ease;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      @keyframes fade {
+        0% {
+          opacity: 0.5;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      /* ===== CARDS ===== */
+      .card {
+        background: var(--card-bg);
+        border-radius: 24px;
+        padding: 22px 24px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+        border: 1px solid var(--card-border);
+        margin-bottom: 24px;
+      }
+
+      .card-header {
+        font-weight: 600;
+        font-size: 1.2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+        color: var(--text-primary);
+        border-bottom: 1px dashed var(--border-color);
+        padding-bottom: 10px;
+      }
+
+      /* ===== QUESTION BOX ===== */
+      .question-box {
+        background: var(--question-bg);
+        border-radius: 18px;
+        padding: 20px;
+        border: 1px solid var(--question-border);
+        margin-bottom: 20px;
+      }
+
+      .question-text {
+        font-size: 1.2rem;
+        font-weight: 500;
+        margin-bottom: 18px;
+        color: var(--text-primary);
+      }
+
+      .options label {
+        display: block;
+        background: var(--option-bg);
+        padding: 12px 18px;
+        border-radius: 40px;
+        margin-bottom: 10px;
+        border: 1px solid var(--option-border);
+        transition: 0.15s;
+        cursor: pointer;
+        color: var(--text-primary);
+      }
+
+      .options label:hover {
+        background: var(--option-hover);
+        border-color: var(--subhead-border);
+      }
+
+      .options input[type="radio"] {
+        margin-right: 14px;
+        accent-color: var(--tab-active);
+        transform: scale(1.1);
+      }
+
+      /* ===== BUTTONS ===== */
+      .btn {
+        background: var(--btn-primary);
+        border: none;
+        color: white;
+        padding: 12px 28px;
+        border-radius: 60px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        transition: 0.2s;
+        border: 1px solid transparent;
+      }
+
+      .btn:hover {
+        transform: scale(0.98);
+      }
+
+      .btn-outline {
+        background: transparent;
+        border: 1px solid var(--btn-outline-border);
+        color: var(--text-primary);
+      }
+
+      .btn-outline:hover {
+        background: var(--btn-outline-hover);
+      }
+
+      .btn-primary {
+        background: var(--btn-primary);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: var(--btn-primary-hover);
+      }
+
+      .btn-success {
+        background: var(--btn-success);
+        color: white;
+      }
+      .btn-success:hover {
+        background: var(--btn-success-hover);
+      }
+
+      .btn-danger {
+        background: var(--btn-danger);
+        color: white;
+      }
+      .btn-danger:hover {
+        background: var(--btn-danger-hover);
+      }
+
+      /* ===== ADMIN ===== */
+      .admin-panel textarea {
+        width: 100%;
+        border: 1px solid var(--input-border);
+        border-radius: 18px;
+        padding: 16px;
+        font-family: monospace;
+        font-size: 0.95rem;
+        resize: vertical;
+        min-height: 120px;
+        background: var(--input-bg);
+        color: var(--text-primary);
+        transition: 0.15s;
+      }
+
+      .admin-panel textarea:focus {
+        outline: 2px solid var(--subhead-border);
+        border-color: transparent;
+      }
+
+      .admin-actions {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin: 12px 0 16px;
+      }
+
+      .status-badge {
+        background: var(--badge-bg);
+        color: var(--badge-text);
+        border-radius: 60px;
+        padding: 6px 18px;
+        font-size: 0.9rem;
+      }
+
+      .candidate-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+      }
+
+      .score-area {
+        background: var(--score-bg);
+        border-radius: 60px;
+        padding: 6px 20px;
+        font-weight: 500;
+        color: var(--text-primary);
+      }
+
+      .question-counter {
+        font-weight: 400;
+        color: var(--text-secondary);
+      }
+
+      .footer-note {
+        margin-top: 24px;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        text-align: center;
+        border-top: 1px solid var(--footer-border);
+        padding-top: 18px;
+      }
+
+      .example-hint {
+        background: var(--hint-bg);
+        padding: 12px 16px;
+        border-radius: 40px;
+        font-size: 0.9rem;
+        color: var(--hint-text);
+      }
+
+      .example-hint i {
+        margin-right: 8px;
+        color: var(--subhead-border);
+      }
+
+      .save-indicator {
+        font-size: 0.8rem;
+        color: var(--save-indicator);
+        margin-left: 10px;
+      }
+
+      .data-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+
+      .data-actions .btn {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+      }
+
+      .preview-area {
+        background: var(--preview-bg);
+        border-radius: 20px;
+        padding: 14px;
+        border: 1px solid var(--preview-border);
+      }
+
+      /* ===== RESPONSIVE ===== */
+      @media (max-width: 600px) {
+        .app-container {
+          padding: 16px;
+        }
+        .tab-btn {
+          padding: 8px 14px;
+          font-size: 0.9rem;
+        }
+        .candidate-actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .header-top {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .header-controls {
+          justify-content: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container" id="app">
+      <!-- ===== HEADER WITH THEME TOGGLE ===== -->
+      <div class="header-top">
+        <h1>
+          <i class="fas fa-train" style="color: var(--subhead-border)"></i> RRB
+          CBT · Practice
+        </h1>
+        <div class="header-controls">
+          <button
+            class="theme-toggle"
+            id="themeToggle"
+            aria-label="Toggle theme"
+          >
+            <i class="fas fa-sun sun-icon"></i>
+            <i class="fas fa-moon moon-icon"></i>
+            <span id="themeLabel">Light</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="subhead">
+        <div class="subhead-left">
+          <i class="fas fa-user-graduate"></i> Candidate &amp; Admin portal ·
+          <span id="storageStatus">💾 Auto-saved</span>
+        </div>
+        <span style="font-size: 0.8rem" id="questionCountFooter"
+          >0 questions</span
+        >
+      </div>
+
+      <!-- ===== TABS ===== -->
+      <div class="portal-tabs">
+        <button class="tab-btn active" data-tab="candidate">
+          <i class="fas fa-user"></i> Candidate
+        </button>
+        <button class="tab-btn" data-tab="admin">
+          <i class="fas fa-user-cog"></i> Admin
+        </button>
+      </div>
+
+      <!-- ========= CANDIDATE TAB ========= -->
+      <div id="candidate" class="tab-content active">
+        <div class="card">
+          <div class="card-header">
+            <span
+              ><i
+                class="fas fa-pencil-alt"
+                style="margin-right: 12px; color: var(--subhead-border)"
+              ></i>
+              Practice Exam</span
+            >
+            <span class="question-counter" id="questionCounter">1 / 5</span>
+          </div>
+
+          <div id="candidateQuestionArea" class="question-box">
+            <div class="question-text" id="questionText">
+              Loading questions...
+            </div>
+            <div class="options" id="optionsContainer"></div>
+          </div>
+
+          <div class="candidate-actions">
+            <div>
+              <button class="btn btn-outline" id="prevBtn">
+                <i class="fas fa-chevron-left"></i> Prev
+              </button>
+              <button class="btn btn-outline" id="nextBtn">
+                Next <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+            <div>
+              <button class="btn btn-success" id="submitExamBtn">
+                <i class="fas fa-check-circle"></i> Submit exam
+              </button>
+              <button
+                class="btn btn-outline"
+                id="resetExamBtn"
+                style="margin-left: 8px"
+              >
+                <i class="fas fa-redo"></i> Reset
+              </button>
+            </div>
+            <div class="score-area" id="scoreDisplay">Score: 0</div>
+          </div>
+        </div>
+        <div class="example-hint">
+          <i class="fas fa-info-circle"></i> Your progress is auto-saved.
+          Refresh the page to continue where you left off.
+        </div>
+      </div>
+
+      <!-- ========= ADMIN TAB ========= -->
+      <div id="admin" class="tab-content admin-panel">
+        <div class="card">
+          <div class="card-header">
+            <span
+              ><i
+                class="fas fa-database"
+                style="margin-right: 10px; color: var(--btn-success)"
+              ></i>
+              Question Bank</span
+            >
+            <span class="status-badge" id="questionCountBadge"
+              >0 questions</span
+            >
+          </div>
+
+          <div style="margin-bottom: 16px">
+            <label
+              style="
+                font-weight: 500;
+                display: block;
+                margin-bottom: 6px;
+                color: var(--text-primary);
+              "
+            >
+              <i class="fas fa-paste"></i> Paste questions (copy‑paste format)
+            </label>
+            <textarea
+              id="bulkQuestionInput"
+              placeholder="Format: one question per block&#10;Question: What is 2+2?&#10;Options: 3|4|5|6&#10;Answer: 4&#10;&#10;Question: ..."
+            ></textarea>
+            <div class="admin-actions">
+              <button class="btn btn-primary" id="addBulkBtn">
+                <i class="fas fa-plus-circle"></i> Add / Replace
+              </button>
+              <button class="btn btn-outline" id="clearAllBtn">
+                <i class="fas fa-trash-alt"></i> Clear all
+              </button>
+              <button class="btn btn-outline" id="loadSampleBtn">
+                <i class="fas fa-file-alt"></i> Load sample
+              </button>
+            </div>
+            <div
+              style="
+                font-size: 0.9rem;
+                color: var(--text-secondary);
+                background: var(--preview-bg);
+                padding: 8px 14px;
+                border-radius: 30px;
+                display: inline-block;
+              "
+            >
+              <i
+                class="fas fa-check-circle"
+                style="color: var(--save-indicator)"
+              ></i>
+              Current: <span id="adminQuestionCount">0</span> questions
+              <span class="save-indicator"
+                ><i class="fas fa-save"></i> auto-saved</span
+              >
+            </div>
+          </div>
+
+          <div class="preview-area">
+            <p
+              style="
+                font-weight: 500;
+                margin-bottom: 6px;
+                color: var(--text-primary);
+              "
+            >
+              <i class="fas fa-list-ul"></i> Question preview (first 3)
+            </p>
+            <div
+              id="adminPreview"
+              style="
+                font-size: 0.95rem;
+                max-height: 150px;
+                overflow-y: auto;
+                color: var(--text-secondary);
+              "
+            >
+              No questions yet.
+            </div>
+          </div>
+
+          <!-- Data Management -->
+          <div
+            style="
+              margin-top: 16px;
+              padding-top: 16px;
+              border-top: 1px solid var(--border-color);
+            "
+          >
+            <p
+              style="
+                font-weight: 500;
+                margin-bottom: 8px;
+                color: var(--text-primary);
+              "
+            >
+              <i class="fas fa-file-export"></i> Data Management
+            </p>
+            <div class="data-actions">
+              <button class="btn btn-outline" id="exportDataBtn">
+                <i class="fas fa-download"></i> Export Questions
+              </button>
+              <button class="btn btn-outline" id="importDataBtn">
+                <i class="fas fa-upload"></i> Import Questions
+              </button>
+              <input
+                type="file"
+                id="fileInput"
+                accept=".json"
+                style="display: none"
+              />
+              <button class="btn btn-danger" id="clearStorageBtn">
+                <i class="fas fa-eraser"></i> Clear Saved Data
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="example-hint">
+          <i class="fas fa-code"></i> Format: <strong>Question:</strong> text
+          <br />
+          <strong>Options:</strong> opt1|opt2|opt3|opt4 &nbsp;
+          <strong>Answer:</strong> correct option
+        </div>
+      </div>
+
+      <div class="footer-note">
+        <i class="fas fa-server"></i> Data persists in localStorage ·
+        <span id="questionCountFooter2">0</span> questions loaded
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        "use strict";
+
+        // ===== THEME MANAGEMENT =====
+        function getPreferredTheme() {
+          const saved = localStorage.getItem("rrbTheme");
+          if (saved) return saved;
+          return window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+        }
+
+        function setTheme(theme) {
+          document.documentElement.setAttribute("data-theme", theme);
+          localStorage.setItem("rrbTheme", theme);
+          const label = document.getElementById("themeLabel");
+          if (label)
+            label.textContent = theme.charAt(0).toUpperCase() + theme.slice(1);
+        }
+
+        function toggleTheme() {
+          const current =
+            document.documentElement.getAttribute("data-theme") || "light";
+          const next = current === "light" ? "dark" : "light";
+          setTheme(next);
+        }
+
+        // Apply theme on load
+        const initialTheme = getPreferredTheme();
+        setTheme(initialTheme);
+
+        // Theme toggle button
+        document
+          .getElementById("themeToggle")
+          .addEventListener("click", toggleTheme);
+
+        // ---------- DATA STORE ----------
+        let questions = [];
+        let currentQuestionIndex = 0;
+        let selectedAnswers = {};
+        let examSubmitted = false;
+
+        // ---------- DEFAULT SAMPLE QUESTIONS ----------
+        const defaultQuestions = [
+          {
+            question: "What is the capital of India?",
+            options: ["New Delhi", "Mumbai", "Kolkata", "Chennai"],
+            answer: "New Delhi",
+          },
+          {
+            question: "Which of the following is a prime number?",
+            options: ["21", "29", "49", "51"],
+            answer: "29",
+          },
+          {
+            question: "What is the square root of 144?",
+            options: ["10", "11", "12", "13"],
+            answer: "12",
+          },
+          {
+            question: "Who wrote the Indian national anthem 'Jana Gana Mana'?",
+            options: [
+              "Bankim Chandra",
+              "Rabindranath Tagore",
+              "Mahatma Gandhi",
+              "Subhas Chandra Bose",
+            ],
+            answer: "Rabindranath Tagore",
+          },
+          {
+            question: "Which planet is known as the Red Planet?",
+            options: ["Venus", "Jupiter", "Mars", "Saturn"],
+            answer: "Mars",
+          },
+        ];
+
+        // ---------- PERSISTENCE FUNCTIONS ----------
+        function saveAllData() {
+          try {
+            const data = {
+              questions: questions,
+              selectedAnswers: selectedAnswers,
+              currentQuestionIndex: currentQuestionIndex,
+              examSubmitted: examSubmitted,
+            };
+            localStorage.setItem("rrbExamData", JSON.stringify(data));
+            const status = document.getElementById("storageStatus");
+            if (status) {
+              status.textContent = "💾 Auto-saved";
+              status.style.color = "var(--save-indicator)";
+            }
+          } catch (e) {
+            console.warn("Save error:", e);
+          }
+        }
+
+        function loadAllData() {
+          try {
+            const saved = localStorage.getItem("rrbExamData");
+            if (saved) {
+              const data = JSON.parse(saved);
+              questions = data.questions || [];
+              selectedAnswers = data.selectedAnswers || {};
+              currentQuestionIndex = data.currentQuestionIndex || 0;
+              examSubmitted = data.examSubmitted || false;
+              return true;
+            }
+          } catch (e) {
+            console.warn("Load error:", e);
+          }
+          return false;
+        }
+
+        function clearAllData() {
+          localStorage.removeItem("rrbExamData");
+          questions = [];
+          selectedAnswers = {};
+          currentQuestionIndex = 0;
+          examSubmitted = false;
+        }
+
+        // ---------- DOM refs ----------
+        const questionText = document.getElementById("questionText");
+        const optionsContainer = document.getElementById("optionsContainer");
+        const questionCounter = document.getElementById("questionCounter");
+        const scoreDisplay = document.getElementById("scoreDisplay");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const submitBtn = document.getElementById("submitExamBtn");
+        const resetExamBtn = document.getElementById("resetExamBtn");
+
+        const bulkInput = document.getElementById("bulkQuestionInput");
+        const addBulkBtn = document.getElementById("addBulkBtn");
+        const clearAllBtn = document.getElementById("clearAllBtn");
+        const loadSampleBtn = document.getElementById("loadSampleBtn");
+        const adminPreview = document.getElementById("adminPreview");
+        const adminQuestionCount =
+          document.getElementById("adminQuestionCount");
+        const questionCountBadge =
+          document.getElementById("questionCountBadge");
+        const questionCountFooter = document.getElementById(
+          "questionCountFooter",
+        );
+        const questionCountFooter2 = document.getElementById(
+          "questionCountFooter2",
+        );
+        const exportBtn = document.getElementById("exportDataBtn");
+        const importBtn = document.getElementById("importDataBtn");
+        const fileInput = document.getElementById("fileInput");
+        const clearStorageBtn = document.getElementById("clearStorageBtn");
+
+        // ---------- UTILITY ----------
+        function updateAdminUI() {
+          const count = questions.length;
+          adminQuestionCount.textContent = count;
+          questionCountBadge.textContent = count + " questions";
+          questionCountFooter.textContent = count + " questions";
+          questionCountFooter2.textContent = count;
+
+          if (count === 0) {
+            adminPreview.innerHTML =
+              '<span style="color: var(--text-muted);">No questions in bank.</span>';
+            return;
+          }
+          let html = "";
+          const preview = questions.slice(0, 3);
+          preview.forEach((q, idx) => {
+            html += `<div style="padding: 6px 0; border-bottom:1px solid var(--border-color); color: var(--text-primary);">
+          <strong>${idx + 1}.</strong> ${q.question.substring(0, 60)}${q.question.length > 60 ? "…" : ""} (${q.options.length} opts)
+        </div>`;
+          });
+          if (questions.length > 3) {
+            html += `<div style="color: var(--text-secondary); padding-top:6px;">+ ${questions.length - 3} more</div>`;
+          }
+          adminPreview.innerHTML = html;
+          saveAllData();
+        }
+
+        function renderQuestion() {
+          if (examSubmitted) {
+            questionText.textContent =
+              "✅ Exam submitted. Review your answers below.";
+            if (questions.length > 0) {
+              const q = questions[currentQuestionIndex];
+              let html = `<div style="font-weight:500; margin-bottom:12px; color: var(--text-primary);">${q.question}</div>`;
+              q.options.forEach((opt) => {
+                const isSelected =
+                  selectedAnswers[currentQuestionIndex] === opt;
+                const isCorrect = opt === q.answer;
+                let icon = "";
+                if (isSelected && isCorrect) icon = " ✅";
+                else if (isSelected && !isCorrect) icon = " ❌";
+                else if (!isSelected && isCorrect) icon = " ✔️";
+                const bgColor = isSelected
+                  ? "var(--option-hover)"
+                  : "transparent";
+                html += `<div style="padding:6px 12px; border-radius:30px; background:${bgColor}; margin:4px 0; color: var(--text-primary);">${opt} ${icon}</div>`;
+              });
+              optionsContainer.innerHTML = html;
+              questionCounter.textContent = `${currentQuestionIndex + 1} / ${questions.length}`;
+            }
+            return;
+          }
+
+          if (questions.length === 0) {
+            questionText.textContent = "⚠️ No questions. Please add via Admin.";
+            optionsContainer.innerHTML = "";
+            questionCounter.textContent = "0 / 0";
+            return;
+          }
+
+          const q = questions[currentQuestionIndex];
+          if (!q) return;
+          questionText.textContent = q.question;
+          const selected = selectedAnswers[currentQuestionIndex] || null;
+          let html = "";
+          q.options.forEach((opt) => {
+            const checked = selected === opt ? "checked" : "";
+            html += `<label><input type="radio" name="qOption" value="${opt}" ${checked}> ${opt}</label>`;
+          });
+          optionsContainer.innerHTML = html;
+
+          questionCounter.textContent = `${currentQuestionIndex + 1} / ${questions.length}`;
+
+          document
+            .querySelectorAll('input[name="qOption"]')
+            .forEach((radio) => {
+              radio.addEventListener("change", function (e) {
+                if (examSubmitted) return;
+                selectedAnswers[currentQuestionIndex] = this.value;
+                updateScoreDisplay();
+                saveAllData();
+              });
+            });
+        }
+
+        function updateScoreDisplay() {
+          if (questions.length === 0) {
+            scoreDisplay.textContent = "Score: 0";
+            return;
+          }
+          let correct = 0;
+          for (let i = 0; i < questions.length; i++) {
+            const userAns = selectedAnswers[i];
+            if (userAns && questions[i] && userAns === questions[i].answer) {
+              correct++;
+            }
+          }
+          scoreDisplay.textContent = `Score: ${correct} / ${questions.length}`;
+        }
+
+        function submitExam() {
+          if (questions.length === 0) {
+            alert("No questions to submit.");
+            return;
+          }
+          examSubmitted = true;
+          renderQuestion();
+          updateScoreDisplay();
+          saveAllData();
+        }
+
+        function resetExam() {
+          if (questions.length === 0) return;
+          if (!confirm("Reset all answers? Your progress will be cleared."))
+            return;
+          selectedAnswers = {};
+          examSubmitted = false;
+          currentQuestionIndex = 0;
+          renderQuestion();
+          updateScoreDisplay();
+          saveAllData();
+        }
+
+        function goToPrev() {
+          if (questions.length === 0) return;
+          if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            renderQuestion();
+            saveAllData();
+          }
+        }
+
+        function goToNext() {
+          if (questions.length === 0) return;
+          if (currentQuestionIndex < questions.length - 1) {
+            currentQuestionIndex++;
+            renderQuestion();
+            saveAllData();
+          } else {
+            alert("You are on the last question.");
+          }
+        }
+
+        function resetExamState() {
+          examSubmitted = false;
+          selectedAnswers = {};
+          currentQuestionIndex = 0;
+          if (questions.length > 0) {
+            renderQuestion();
+            updateScoreDisplay();
+          } else {
+            renderQuestion();
+            scoreDisplay.textContent = "Score: 0";
+          }
+          saveAllData();
+        }
+
+        // ---------- ADMIN ----------
+        function parseBulkQuestions(text) {
+          const blocks = text
+            .split(/\n\s*\n/)
+            .filter((b) => b.trim().length > 0);
+          const parsed = [];
+          for (let block of blocks) {
+            const lines = block
+              .split("\n")
+              .map((l) => l.trim())
+              .filter((l) => l.length > 0);
+            let qText = "";
+            let opts = [];
+            let answer = "";
+            for (let line of lines) {
+              if (line.toLowerCase().startsWith("question:")) {
+                qText = line.substring(9).trim();
+              } else if (line.toLowerCase().startsWith("options:")) {
+                const parts = line
+                  .substring(8)
+                  .trim()
+                  .split("|")
+                  .map((s) => s.trim());
+                opts = parts;
+              } else if (line.toLowerCase().startsWith("answer:")) {
+                answer = line.substring(7).trim();
+              }
+            }
+            if (qText && opts.length === 4 && answer) {
+              parsed.push({ question: qText, options: opts, answer: answer });
+            }
+          }
+          return parsed;
+        }
+
+        function addBulkQuestions() {
+          const raw = bulkInput.value;
+          if (!raw.trim()) {
+            alert("Please paste questions in the correct format.");
+            return;
+          }
+          const parsed = parseBulkQuestions(raw);
+          if (parsed.length === 0) {
+            alert(
+              "No valid questions found. Check format: Question: / Options: (4 opts with |) / Answer:",
+            );
+            return;
+          }
+          questions = parsed;
+          resetExamState();
+          updateAdminUI();
+          bulkInput.value = "";
+          renderQuestion();
+          updateScoreDisplay();
+          saveAllData();
+          alert(`✅ ${questions.length} questions loaded!`);
+        }
+
+        function clearAllQuestions() {
+          if (questions.length === 0) return;
+          if (confirm("Delete all questions?")) {
+            questions = [];
+            resetExamState();
+            updateAdminUI();
+            renderQuestion();
+            updateScoreDisplay();
+            saveAllData();
+          }
+        }
+
+        function loadSample() {
+          questions = JSON.parse(JSON.stringify(defaultQuestions));
+          resetExamState();
+          updateAdminUI();
+          renderQuestion();
+          updateScoreDisplay();
+          bulkInput.value = "";
+          saveAllData();
+          alert("Sample questions loaded (5 items).");
+        }
+
+        // ---------- EXPORT / IMPORT ----------
+        function exportQuestions() {
+          if (questions.length === 0) {
+            alert("No questions to export.");
+            return;
+          }
+          const data = {
+            questions: questions,
+            exportedAt: new Date().toISOString(),
+            totalQuestions: questions.length,
+          };
+          const blob = new Blob([JSON.stringify(data, null, 2)], {
+            type: "application/json",
+          });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `rrb-questions-${new Date().toISOString().slice(0, 10)}.json`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }
+
+        function importQuestions(file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            try {
+              const data = JSON.parse(e.target.result);
+              if (
+                data.questions &&
+                Array.isArray(data.questions) &&
+                data.questions.length > 0
+              ) {
+                questions = data.questions;
+                resetExamState();
+                updateAdminUI();
+                renderQuestion();
+                updateScoreDisplay();
+                saveAllData();
+                alert(
+                  `✅ Imported ${questions.length} questions successfully!`,
+                );
+              } else {
+                alert("Invalid file format. Expected { questions: [...] }");
+              }
+            } catch (err) {
+              alert("Error parsing file: " + err.message);
+            }
+          };
+          reader.readAsText(file);
+        }
+
+        function clearStorage() {
+          if (
+            confirm(
+              "This will delete ALL saved data (questions, answers, progress). Continue?",
+            )
+          ) {
+            clearAllData();
+            questions = JSON.parse(JSON.stringify(defaultQuestions));
+            resetExamState();
+            updateAdminUI();
+            renderQuestion();
+            updateScoreDisplay();
+            saveAllData();
+            alert("Storage cleared. Sample questions loaded.");
+          }
+        }
+
+        // ---------- TAB SWITCHING ----------
+        function switchTab(tabId) {
+          document
+            .querySelectorAll(".tab-content")
+            .forEach((el) => el.classList.remove("active"));
+          document
+            .querySelectorAll(".tab-btn")
+            .forEach((el) => el.classList.remove("active"));
+          document.getElementById(tabId).classList.add("active");
+          document
+            .querySelector(`.tab-btn[data-tab="${tabId}"]`)
+            .classList.add("active");
+          if (tabId === "admin") {
+            updateAdminUI();
+          }
+        }
+
+        document.querySelectorAll(".tab-btn").forEach((btn) => {
+          btn.addEventListener("click", function (e) {
+            const tab = this.dataset.tab;
+            switchTab(tab);
+          });
+        });
+
+        // ---------- INIT ----------
+        function init() {
+          const hasSaved = loadAllData();
+
+          if (!hasSaved || questions.length === 0) {
+            questions = JSON.parse(JSON.stringify(defaultQuestions));
+            selectedAnswers = {};
+            currentQuestionIndex = 0;
+            examSubmitted = false;
+            saveAllData();
+          }
+
+          if (currentQuestionIndex >= questions.length) {
+            currentQuestionIndex = 0;
+          }
+
+          resetExamState();
+          updateAdminUI();
+          renderQuestion();
+          updateScoreDisplay();
+
+          prevBtn.addEventListener("click", goToPrev);
+          nextBtn.addEventListener("click", goToNext);
+          submitBtn.addEventListener("click", function () {
+            if (examSubmitted) {
+              alert("Exam already submitted.");
+              return;
+            }
+            if (questions.length === 0) {
+              alert("No questions to submit.");
+              return;
+            }
+            submitExam();
+          });
+          resetExamBtn.addEventListener("click", resetExam);
+
+          addBulkBtn.addEventListener("click", addBulkQuestions);
+          clearAllBtn.addEventListener("click", clearAllQuestions);
+          loadSampleBtn.addEventListener("click", loadSample);
+
+          exportBtn.addEventListener("click", exportQuestions);
+          importBtn.addEventListener("click", function () {
+            fileInput.click();
+          });
+          fileInput.addEventListener("change", function (e) {
+            if (this.files && this.files[0]) {
+              importQuestions(this.files[0]);
+            }
+            this.value = "";
+          });
+          clearStorageBtn.addEventListener("click", clearStorage);
+
+          document.addEventListener("change", function (e) {
+            if (e.target.name === "qOption") {
+              saveAllData();
+            }
+          });
+
+          document.getElementById("questionCountFooter").textContent =
+            questions.length + " questions";
+          document.getElementById("questionCountFooter2").textContent =
+            questions.length;
+        }
+
+        init();
+      })();
+    </script>
+  </body>
+</html>
